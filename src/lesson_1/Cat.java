@@ -1,6 +1,6 @@
 package lesson_1;
 
-public class Cat implements Runner, Jumper {
+public class Cat implements Runner, Jumper, Participant {
 
     private static String DEFAULT_NAME = "Барсик";
     private static double DEFAULT_RUN_LIMIT = 75.0;
@@ -10,22 +10,32 @@ public class Cat implements Runner, Jumper {
     private final double runLimit;
     private final double jumpLimit;
 
-    Cat(String name, double runLimit, double jumpLimit) {
+    public Cat(String name, double runLimit, double jumpLimit) {
         this.name = name;
         this.runLimit = runLimit;
         this.jumpLimit = jumpLimit;
     }
 
-    Cat(String name, double runLimit) {
+    public Cat(String name, double runLimit) {
         this(name, runLimit, DEFAULT_JUMP_LIMIT);
     }
 
-    Cat(String name) {
+    public Cat(String name) {
         this(name, DEFAULT_RUN_LIMIT);
     }
 
-    Cat() {
+    public Cat() {
         this(DEFAULT_NAME);
+    }
+
+    public boolean passBarrier(Barrier barrier) {
+        if (barrier.canBarrier(this)) {
+            return  barrier.passBarrier(this);
+        } else {
+            System.out.println("Участник " + this +
+                    " не умеет " + barrier.getActionVerb() + ".");
+            return false;
+        }
     }
 
     public boolean run(RunBarrier runBarrier) {

@@ -28,26 +28,18 @@ public class Main {
 
 
         for (Object participant : participants) {
+
+            if (!(participant instanceof Participant)) {
+                System.out.println(participant + " не может быть участником.");
+                continue;
+            }
+
             System.out.println("Участник " + participant + " начинает:");
             int totalBarriers = barriers.size();
             int barrierCounter = 0;
             for (Object barrier : barriers) {
-                if (barrier instanceof RunBarrier) {
-                    if (!(participant instanceof Runner)) {
-                        System.out.println("Участник " + participant +
-                                " не знает что такое бегать, снимаем с дистанции.");
-                        break;
-                    }
-                    if (((Runner) participant).run((RunBarrier) barrier)) {
-                        barrierCounter++;
-                    } else break;
-                } else if (barrier instanceof JumpBarrier) {
-                    if (!(participant instanceof Jumper)) {
-                        System.out.println("Участник " + participant +
-                                " не знает что такое прыгать, снимаем с дистанции.");
-                        break;
-                    }
-                    if (((Jumper) participant).jump((JumpBarrier) barrier)) {
+                if (barrier instanceof Barrier) {
+                    if (((Participant) participant).passBarrier((Barrier) barrier)) {
                         barrierCounter++;
                     } else break;
                 } else {

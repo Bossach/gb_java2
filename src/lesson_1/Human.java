@@ -1,6 +1,6 @@
 package lesson_1;
 
-public class Human implements Runner, Jumper {
+public class Human implements Runner, Jumper, Participant {
 
     private static String DEFAULT_NAME = "Иван";
     private static double DEFAULT_RUN_LIMIT = 150.0;
@@ -10,22 +10,32 @@ public class Human implements Runner, Jumper {
     private final double runLimit;
     private final double jumpLimit;
 
-    Human(String name, double runLimit, double jumpLimit) {
+    public Human(String name, double runLimit, double jumpLimit) {
         this.name = name;
         this.runLimit = runLimit;
         this.jumpLimit = jumpLimit;
     }
 
-    Human(String name, double runLimit) {
+    public Human(String name, double runLimit) {
         this(name, runLimit, DEFAULT_JUMP_LIMIT);
     }
 
-    Human(String name) {
+    public Human(String name) {
         this(name, DEFAULT_RUN_LIMIT);
     }
 
-    Human() {
+    public Human() {
         this(DEFAULT_NAME);
+    }
+
+    public boolean passBarrier(Barrier barrier) {
+        if (barrier.canBarrier(this)) {
+            return  barrier.passBarrier(this);
+        } else {
+            System.out.println("Участник " + this +
+                    " не умеет " + barrier.getActionVerb() + ".");
+            return false;
+        }
     }
 
     public boolean run(RunBarrier runBarrier) {
