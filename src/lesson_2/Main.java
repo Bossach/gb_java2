@@ -21,7 +21,10 @@ public class Main {
     }
 
     public static int fourByFourStringArraySummator(String[][] array) {
-        if (array.length != 4 || array[0].length != 4) throw new MyArraySizeException();
+        if (array.length != 4) throw new MyArraySizeException();
+        for (String[] strings : array) {
+            if (strings.length != 4) throw new MyArraySizeException();
+        }
 
         int sum = 0;
 
