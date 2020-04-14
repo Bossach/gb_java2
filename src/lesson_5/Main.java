@@ -62,20 +62,10 @@ public class Main {
         //Ждём все потоки
         boolean isComplete;
 
-        while (true) {
-            isComplete = true;
+      
             for (Thread thread : threads) {
-                if (thread.isAlive()) {
-                    isComplete = false;
-                    break;
-                }
+               thread.join();
             }
-            if (isComplete) {
-                break;
-            } else {
-                Thread.yield();
-            }
-        }
         //
 
         arr = joinFloatArrays(splittedArrays);
