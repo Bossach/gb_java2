@@ -57,8 +57,11 @@ public class ClientHandler {
             String message = inputStream.readUTF();
             if (message.startsWith(END_CMD)) {
                 return;
+            } else if (message.startsWith(PRIVATE_CMD)) {
+                serverInstance.privateMessage(message, this);
+            } else {
+                serverInstance.broadcastMessage(String.format("%s: %s", nickname, message));
             }
-            serverInstance.broadcastMessage(String.format("%s: %s", nickname, message));
         }
     }
 

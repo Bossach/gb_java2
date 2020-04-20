@@ -69,6 +69,35 @@ public class MyServer {
         }
     }
 
+    public synchronized void privateMessage(String message, ClientHandler sender) throws IOException {
+        String[] splittedMessage = message.split(" ", 3);
+        if (splittedMessage.length < 3) {
+            sender.sendMessage("Server: Invalid private message");
+            return;
+        }
+
+        String receiverNickname = splittedMessage[1];
+        String messageBody = splittedMessage[2];
+
+        ClientHandler receiver = getClientByNickname(receiverNickname);
+
+        if (receiver == null) {
+            sender.sendMessage("Server: There is no " + receiverNickname + " in chat");
+        } else {
+            receiver.sendMessage(String.format("%s: %s", sender.getNickname(), messageBody ));
+        }
+
+
+
+    }
+
+    public synchronized ClientHandler getClientByNickname(String nickname) {
+        for (ClientHandler client : clients) {
+            if (client.getNickname().equals(nickname)) return client;
+        }
+        return null;
+    }
+
     public synchronized void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
     }
