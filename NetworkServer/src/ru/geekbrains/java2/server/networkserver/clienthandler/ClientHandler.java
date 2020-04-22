@@ -12,6 +12,7 @@ import static ru.geekbrains.java2.server.networkserver.MessageConstant.*;
 
 public class ClientHandler {
 
+    private static final long AUTH_TIMEOUT = 120000;
     private final MyServer serverInstance;
     private final AuthService authService;
     private final Socket clientSocket;
@@ -66,6 +67,22 @@ public class ClientHandler {
     }
 
     private void authentication() throws IOException {
+        Thread timer = new Thread(() -> {
+            try {
+                System.err.println("tomer thread started");
+                Thread.sleep(AUTH_TIMEOUT);
+                System.err.println("time expired");
+                try {
+                    sendMessage("Authentication timeout expired");
+                } catch (IOException ignored) {
+                } finally {
+                    System.err.println("closing connection cause timer");
+                    closeConnection();
+                }
+            } catch (InterruptedException ignored) { }
+        });
+        timer.start();
+
         while (true) {
             String message = inputStream.readUTF();
             if (message.startsWith(AUTH_CMD)) {
@@ -81,6 +98,7 @@ public class ClientHandler {
                     sendMessage("Учетная запись уже используется!");
                 }
                 else {
+                    timer.interrupt();
                     sendMessage(String.format("%s %s", AUTH_SUCCESSFUL_CMD, nickname));
                     setNickname(nickname);
                     serverInstance.broadcastMessage(nickname + " Зашел в чат!");
