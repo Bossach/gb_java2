@@ -69,14 +69,11 @@ public class ClientHandler {
     private void authentication() throws IOException {
         Thread timer = new Thread(() -> {
             try {
-                System.err.println("tomer thread started");
                 Thread.sleep(AUTH_TIMEOUT);
-                System.err.println("time expired");
                 try {
                     sendMessage("Authentication timeout expired");
                 } catch (IOException ignored) {
                 } finally {
-                    System.err.println("closing connection cause timer");
                     closeConnection();
                 }
             } catch (InterruptedException ignored) { }
