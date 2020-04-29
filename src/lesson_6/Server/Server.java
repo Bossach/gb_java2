@@ -17,17 +17,13 @@ public class Server {
     private Thread transmitter;
 
     public static void main(String[] args) {
-        try {
+
             new Server(PORT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
 
-    public Server(int port) throws IOException {
-
-        if (port > 65535 || port < 0) throw new IOException("Illegal port");
+    public Server(int port) {
 
         startServer(port);
 
@@ -47,7 +43,7 @@ public class Server {
             socket = serverSocket.accept();
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
         } finally {
             waitAnim.interrupt();
@@ -68,6 +64,7 @@ public class Server {
                     out.writeUTF(line);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
             new Thread(this::closeServer).start();
